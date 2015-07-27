@@ -20,14 +20,55 @@ var MapPage = React.createClass({
     });
 
     AppStore.connectWith(this.listenStore);
+    AppStore.onNewMessage(this.newMessage);
   },
 
-  listenStore: function(){
+  newMessage: function(username, message, geo){
+    var self = this;
+    var position = new google.maps.LatLng(geo.lat, geo.lng);
+
+    var inWindow = this.state.map.getBounds().containsLatLng(position);
+    if (!inWindow){
+      console.log("Not in window");
+      return;
+    }
+
+    var marker = new google.maps.Marker({
+      map:self.state.map,
+      animation: google.maps.Animation.BOUNCE,
+      position: position
+    });
+
+    var infoWindow = new google.maps.InfoWindow({
+      content: username + " > " + message
+    });
+
+    var markerListener = google.maps.event.addListener(marker, 'click', toggleBounce);
+    var windowListener = google.maps.event.addListener(infoWindow,'closeclick',removeAnimation);
+
+    function toggleBounce() {
+      removeAnimation();
+      infoWindow.open(self.state.map,marker);
+    }
+
+    function removeAnimation(){
+      if (marker.getAnimation() != null) {
+        marker.setAnimation(null);
+      }
+    }
+
+
+
+  },
+
+
+
+
+listenStore: function(){
     this.setState({
       name: AppStore.getUserName(),
       chat: AppStore.getChat(),
       numUsers: AppStore.getNumUsers(),
-      typing: AppStore.getTyping(),
     });
   },
 
@@ -39,7 +80,6 @@ var MapPage = React.createClass({
     }
 
     if (!this.state.map ) {
-      console.log(geolib);
       geolib.geoposition(function(coords){
         var latitude = coords.latitude;
         var longitude = coords.longitude;
@@ -48,12 +88,12 @@ var MapPage = React.createClass({
           longitude: longitude
         });
 
-        var map = new GMaps({
-          el: '#map',
-          lat: latitude,
-          lng: longitude,
-          zoom: 15
-        });
+       var mapOptions = {
+          zoom: 15,
+          center: new google.maps.LatLng(latitude,longitude)
+        };
+
+        var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
         self.setState({
           map: map
@@ -92,6 +132,7 @@ var MapPage = React.createClass({
     //this.componentDidUpdate();
   },
 
+
   c1omponentDidUpdate: function(){
     var self = this;
     return;
@@ -127,6 +168,8 @@ var MapPage = React.createClass({
 
     return (
       <div className="map-holder">
+        Name: {this.state.name},
+        NumUsers: {this.state.numUsers},
         <div id="map" width="400" height="400"></div>
       </div>
     );

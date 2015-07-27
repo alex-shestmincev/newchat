@@ -9,17 +9,30 @@
     _numUsers: null,
     _chat: [],
     _listeners: [],
+    _listeners_new_message: [],
     _typing: {},
     _valid_images: {},
 
     pushChat: function(message){
+      console.log(message);
       this._chat.push(message);
       this.storeChanges();
+
     },
 
     storeChanges: function(){
       this._listeners.forEach(function(callback){
         callback();
+      });
+    },
+
+    actionNewMessage: function(username,message){
+      var geo = {
+        lat: 50.0312804 + username.length * 0.001,
+        lng: 36.2274277 + username.length * 0.001
+      }
+      this._listeners_new_message.forEach(function(callback){
+        callback(username, message, geo);
       });
     },
 
@@ -55,12 +68,17 @@
       this._listeners.push(callback);
     },
 
+    onNewMessage: function(callback){
+      this._listeners_new_message.push(callback);
+    },
+
 
     // API
 
     // FOR DISPATCHER
     newMessage: function(username, message){
       this.pushChat(username + "> " + message);
+      this.actionNewMessage(username, message);
     },
 
     newTyping: function(username){
