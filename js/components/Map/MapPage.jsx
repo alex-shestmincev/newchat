@@ -66,13 +66,14 @@ var MapPage = React.createClass({
     }
 
     function ifMarkerExists(myLatLng){
+      var marker;
       for(var x = 0; x < markers.length; x++) {
         if ( markers[x].getPosition().equals( myLatLng ) ) {
-          return markers[x];
-        }else{
-          return false;
+          marker = markers[x];
+          break;
         }
       }
+      return marker;
     }
 
     function toggleBounce() {

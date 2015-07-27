@@ -13,7 +13,11 @@ body, #content{
 }
 
 .gm-style-iw{
-    height: 50px;
+    min-height: 50px;
+    max-height: 150px;
+    min-width: 100px;
+    max-width: 200px;
+    overflow: scroll !important;
 }
 
 .inputMessage {
