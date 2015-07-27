@@ -8,6 +8,8 @@ var MapPage = React.createClass({
       message: '',
       map: undefined,
 
+      markers: [],
+      infoWindows: [],
       latitude: '',
       longitude: ''
     }
@@ -25,6 +27,8 @@ var MapPage = React.createClass({
 
   newMessage: function(username, message, geo){
     var self = this;
+    var markers = this.state.markers;
+    var infoWindows = this.state.infoWindows;
     var position = new google.maps.LatLng(geo.lat, geo.lng);
 
     var inWindow = this.state.map.getBounds().containsLatLng(position);
@@ -33,18 +37,43 @@ var MapPage = React.createClass({
       return;
     }
 
-    var marker = new google.maps.Marker({
-      map:self.state.map,
-      animation: google.maps.Animation.BOUNCE,
-      position: position
-    });
+    var existMarker = ifMarkerExists(position);
+    if (existMarker){
+      existMarker.setAnimation(google.maps.Animation.BOUNCE);
+      var infowindow = existMarker.infowindow;
+      infowindow.setContent("<p>" + username + " > " + message + "<p>" + infowindow.getContent());
+    }else{
+      var marker = new google.maps.Marker({
+        map:self.state.map,
+        animation: google.maps.Animation.BOUNCE,
+        position: position
+      });
 
-    var infoWindow = new google.maps.InfoWindow({
-      content: username + " > " + message
-    });
+      var infoWindow = new google.maps.InfoWindow({
+        content: "<p>" + username + " > " + message + "<p>"
+      });
 
-    var markerListener = google.maps.event.addListener(marker, 'click', toggleBounce);
-    var windowListener = google.maps.event.addListener(infoWindow,'closeclick',removeAnimation);
+      var markerListener = google.maps.event.addListener(marker, 'click', toggleBounce);
+      var windowListener = google.maps.event.addListener(infoWindow,'closeclick',removeAnimation);
+
+
+      marker.infowindow = infoWindow;
+
+      markers.push(marker);
+      this.setState({
+        markers: markers
+      });
+    }
+
+    function ifMarkerExists(myLatLng){
+      for(var x = 0; x < markers.length; x++) {
+        if ( markers[x].getPosition().equals( myLatLng ) ) {
+          return markers[x];
+        }else{
+          return false;
+        }
+      }
+    }
 
     function toggleBounce() {
       removeAnimation();
@@ -64,7 +93,7 @@ var MapPage = React.createClass({
 
 
 
-listenStore: function(){
+  listenStore: function(){
     this.setState({
       name: AppStore.getUserName(),
       chat: AppStore.getChat(),

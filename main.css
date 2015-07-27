@@ -12,6 +12,10 @@ body, #content{
     height: 400px;
 }
 
+.gm-style-iw{
+    height: 50px;
+}
+
 .inputMessage {
     border: 10px solid #000;
     bottom: 0;
