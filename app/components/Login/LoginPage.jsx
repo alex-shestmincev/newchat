@@ -1,5 +1,5 @@
 import React from "react";
-import dispatcher from "./../../dispatcher.js";
+import dispatcher from "./../../dispatcher";
 
 export default class LoginPage extends React.Component {
 

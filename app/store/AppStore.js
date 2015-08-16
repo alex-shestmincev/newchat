@@ -1,4 +1,4 @@
-import dispatcher from "./../dispatcher.js";
+import dispatcher from "./../dispatcher";
 
 var AppStore = {
 

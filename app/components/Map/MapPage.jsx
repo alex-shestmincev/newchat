@@ -1,6 +1,6 @@
 import React from "react";
 import AppStore from "./../../store/AppStore";
-import geolib from './../../lib/geolib.js';
+import geolib from './../../lib/geolib';
 
 export default class MapPage extends React.Component {
 

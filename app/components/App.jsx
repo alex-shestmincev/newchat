@@ -1,7 +1,7 @@
 import React from "react";
-import api from './../api/api.js';
-import LoginPage from "./Login/LoginPage.jsx";
-import MapPage from "./Map/MapPage.jsx";
+import api from './../api/api';
+import LoginPage from "./Login/LoginPage";
+import MapPage from "./Map/MapPage";
 import AppStore from "./../store/AppStore";
 
 class App extends React.Component {
