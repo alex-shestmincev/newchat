@@ -15,9 +15,9 @@ body, #content{
 .gm-style-iw{
     min-height: 50px;
     max-height: 150px;
-    min-width: 100px;
+    min-width: 150px;
     max-width: 200px;
-    overflow: scroll !important;
+
 }
 
 .inputMessage {

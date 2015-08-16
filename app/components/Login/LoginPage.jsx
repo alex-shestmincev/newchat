@@ -1,30 +1,36 @@
-var LoginPage = React.createClass({
+import React from "react";
+import dispatcher from "./../../dispatcher.js";
 
-  getInitialState: function(){
-    return {
+export default class LoginPage extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
       login: ''
     }
-  },
+    this.loginChanges = this.loginChanges.bind(this);
+    this.logInSubmit = this.logInSubmit.bind(this);
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     this.refs.login.getDOMNode().focus()
-  },
+  }
 
-  loginChanges: function(e){
+  loginChanges(e){
     var login = e.target.value;
     this.setState({
       login: login
     });
-  },
+  }
 
-  logInSubmit: function(e){
+  logInSubmit(e){
     e.preventDefault();
     if (this.state.login){
       dispatcher.dispatch({name:"LOGIN",value:this.state.login});
     }
-  },
+  }
 
-  render: function() {
+  render() {
 
 
     return (
@@ -36,4 +42,4 @@ var LoginPage = React.createClass({
       </div>
     );
   }
-});
+}

@@ -1,5 +1,7 @@
-(function(){
-  var socket = io(crudURL);
+import config from './../config.js';
+import dispatcher from './../dispatcher.js';
+
+var socket = io(config.crudURL);
 
   socket.on('connect', function(){
     //console.log('a user connected');
@@ -66,11 +68,3 @@
     };
   }
 
-
-
-
-
-
-
-
-})();

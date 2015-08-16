@@ -1,9 +1,15 @@
-var MapPage = React.createClass({
+import React from "react";
+import AppStore from "./../../store/AppStore";
+import geolib from './../../lib/geolib.js';
 
-  getInitialState: function(){
-    return{
-      name: '',
-      numUsers: '',
+export default class MapPage extends React.Component {
+
+  constructor(props){
+    super(props);
+
+    this.state = {
+      name: this.props.name,
+      numUsers: this.props.numUsers,
       chat: [],
       message: '',
       map: undefined,
@@ -13,19 +19,26 @@ var MapPage = React.createClass({
       latitude: '',
       longitude: ''
     }
-  },
 
-  componentWillMount: function(){
-    this.setState({
-      name: this.props.name,
-      numUsers: this.props.numUsers
-    });
+    this.listenStore = this.listenStore.bind(this);
+    this.newMessage = this.newMessage.bind(this);
+  }
 
+
+  componentWillMount(){
     AppStore.connectWith(this.listenStore);
     AppStore.onNewMessage(this.newMessage);
-  },
+  }
 
-  newMessage: function(username, message, geo){
+  listenStore(){
+    this.setState({
+      name: AppStore.getUserName(),
+      chat: AppStore.getChat(),
+      numUsers: AppStore.getNumUsers(),
+    });
+  }
+
+  newMessage(username, message, geo){
     var self = this;
     var markers = this.state.markers;
     var infoWindows = this.state.infoWindows;
@@ -89,20 +102,14 @@ var MapPage = React.createClass({
 
 
 
-  },
+  }
 
 
 
 
-  listenStore: function(){
-    this.setState({
-      name: AppStore.getUserName(),
-      chat: AppStore.getChat(),
-      numUsers: AppStore.getNumUsers(),
-    });
-  },
 
-  componentDidMount: function(){
+
+  componentDidMount(){
     var self = this;
 
     if (typeof window === 'undefined'){
@@ -113,10 +120,6 @@ var MapPage = React.createClass({
       geolib.geoposition(function(coords){
         var latitude = coords.latitude;
         var longitude = coords.longitude;
-        self.setState({
-          latitude: latitude,
-          longitude: longitude
-        });
 
        var mapOptions = {
           zoom: 15,
@@ -126,6 +129,8 @@ var MapPage = React.createClass({
         var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
         self.setState({
+          latitude: latitude,
+          longitude: longitude,
           map: map
         });
 
@@ -135,35 +140,10 @@ var MapPage = React.createClass({
 
 
     }
-
-    //var $ = window.$;
-    //var height = $(window).height();
-    //var heightHeader = $('.wr').height();
-    //var heightSearchMenu = $('#FindPage .wrap-container').height();
-    //var heightSearchMenuPad = $('#FindPage .wrap-container').css('padding-top').split('px');
-    //var heightFooter = $('.footer').height();
-    //var heightSum = height-heightHeader-heightSearchMenu-heightSearchMenuPad[0]-heightFooter;
-    //$('.map-holder #map').css({
-    //  height: heightSum
-    //});
-    //
-    //$(window).resize(function(){
-    //  var height = $(window).height();
-    //  var heightHeader = $('.wr').height();
-    //  var heightSearchMenu = $('#FindPage .wrap-container').height();
-    //  var heightSearchMenuPad = $('#FindPage .wrap-container').css('padding-top').split('px');
-    //  var heightFooter = $('.footer').height();
-    //  var heightSum = height-heightHeader-heightSearchMenu-heightSearchMenuPad[0]-heightFooter;
-    //  $('.map-holder #map').css({
-    //    height: heightSum
-    //  });
-    //});
-
-    //this.componentDidUpdate();
-  },
+  }
 
 
-  c1omponentDidUpdate: function(){
+  c1omponentDidUpdate(){
     var self = this;
     return;
 
@@ -192,9 +172,9 @@ var MapPage = React.createClass({
         map.fitLatLngBounds(bounds);
       })
     }
-  },
+  }
 
-  render: function(){
+  render(){
 
     return (
       <div className="map-holder">
@@ -207,4 +187,4 @@ var MapPage = React.createClass({
 
 
 
-});
+}

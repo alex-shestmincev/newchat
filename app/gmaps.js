@@ -14,7 +14,7 @@
 }(this, function() {
 
 /*!
- * GMaps.js v0.4.18
+ * GMaps.app v0.4.18
  * http://hpneo.github.com/gmaps/
  *
  * Copyright 2015, Gustavo Leon
@@ -22,7 +22,7 @@
  */
 
 if (!(typeof window.google === 'object' && window.google.maps)) {
-  throw 'Google Maps API is required. Please register the following JavaScript library http://maps.google.com/maps/api/js?sensor=true.'
+  throw 'Google Maps API is required. Please register the following JavaScript library http://maps.google.com/maps/api/app?sensor=true.'
 }
 
 var extend_object = function(obj, new_obj) {
@@ -2092,7 +2092,7 @@ GMaps.geocode = function(options) {
 // Polygon containsLatLng
 // https://github.com/tparkin/Google-Maps-Point-in-Polygon
 // Poygon getBounds extension - google-maps-extensions
-// http://code.google.com/p/google-maps-extensions/source/browse/google.maps.Polygon.getBounds.js
+// http://code.google.com/p/google-maps-extensions/source/browse/google.maps.Polygon.getBounds.app
 if (!google.maps.Polygon.prototype.getBounds) {
   google.maps.Polygon.prototype.getBounds = function(latLng) {
     var bounds = new google.maps.LatLngBounds();

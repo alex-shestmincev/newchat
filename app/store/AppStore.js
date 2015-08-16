@@ -1,6 +1,6 @@
-(function() {
+import dispatcher from "./../dispatcher.js";
 
-  var AppStore = {
+var AppStore = {
 
     // PRIVATE
 
@@ -139,6 +139,8 @@
 
   };
 
+  module.exports = AppStore;
+
 
   dispatcher.register(function(event){
     switch (event.name){
@@ -179,5 +181,3 @@
   });
 
 
-  window.AppStore = AppStore;
-})();
