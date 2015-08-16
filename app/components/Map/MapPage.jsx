@@ -39,12 +39,11 @@ export default class MapPage extends React.Component {
   }
 
   newMessage(username, message, geo){
-    var self = this;
-    var markers = this.state.markers;
-    var infoWindows = this.state.infoWindows;
-    var position = new google.maps.LatLng(geo.lat, geo.lng);
+    let self = this;
+    let {markers,infoWindows, map}  = this.state;
+    let position = new google.maps.LatLng(geo.lat, geo.lng);
 
-    var inWindow = this.state.map.getBounds().containsLatLng(position);
+    var inWindow = map.getBounds().contains(position);
     if (!inWindow){
       console.log("Not in window");
       return;
